@@ -1,0 +1,15 @@
+email_validator
+Flask
+Flask-Limiter
+Flask-Migrate
+Flask-Session
+Flask-Session-Captcha
+Flask-SQLAlchemy
+Flask-Talisman
+Flask-WTF
+pandas
+psycopg2-binary
+redis
+requests
+shortuuid
+uWSGI

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% set active_page = 'admin' %}
+
+{% block content %}
+<h1 class="my-3">Admins</h1>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+            <thead>
+            <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td><a href="{{ url_for('auth.edit_user', userid=user.id) }}">
+                    <i class="fa fa-pencil text-primary"></i></a>
+                </td>
+                <td><a href="{{ url_for('auth.delete_user', userid=user.id) }}" confirm="Delete {{ user.username }} ?">
+                    <i class="fa fa-trash text-danger"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col my-2">
+        <a class="btn btn-success mb-6" href="{{ url_for('auth.register') }}">Register New Admin</a>
+    </div>
+</div>
+
+
+<!--special request links-->
+<div class="row mt-4">
+    <h1>Special Queries</h1>
+    <div class="col my-3">
+        <ul>
+            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.nomail') }}">Members without an email address</a></li>
+            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.inactive') }}">Inactive Members</a></li>
+            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.equinox') }}">Equinox List (by categories)</a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  app:
+    build: ./app/
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - tschugg-net
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - ./data/uploads:/app/static/uploads
+    env_file:
+      - .env
+  db:
+    build: ./db/
+    restart: unless-stopped
+    networks:
+      - tschugg-net
+    volumes:
+      - db-vol:/var/lib/postgresql/data
+    env_file:
+      - .env
+  redis:
+    image: redis
+    restart: unless-stopped
+    networks:
+      - tschugg-net
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+networks:
+  tschugg-net:
+    driver: bridge
+
+volumes:
+  db-vol:

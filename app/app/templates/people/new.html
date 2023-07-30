@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% set active_page = 'members' %}
+
+{% block content %}
+<h1 class="my-3">{% block title %}Add a new IAFPA member{% endblock %}</h1>
+
+<form id="add_member" accept-charset="UTF-8" method="post">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card border shadow p-3">
+				<h5 class="card-header">Portrait</h5>
+				<dl class="mb-n2">
+					<dt class="small">
+						<label class="form-label" for="member_title">Titel</label>
+					</dt>
+					<dd>
+						<input class="form-control form-control-sm" type="text" name="title" id="member_title" />
+					</dd>
+                    <dt class="small">
+						<label class="form-label" for="member_firstname">First Name</label>
+					</dt>
+					<dd>
+						<input class="form-control form-control-sm" type="text" name="firstname" id="member_firstname" />
+					</dd>
+                    <dt class="small">
+						<label class="form-label" for="member_lastname">Last Name</label>
+					</dt>
+					<dd>
+						<input class="form-control form-control-sm" type="text" name="lastname" id="member_lastname" />
+					</dd>
+        			<dt class="small">
+						<label class="form-label" for="member_email1">Email</label>
+					</dt>
+					<dd>
+						<input class="form-control form-control-sm" type="email" name="email1" id="member_email1" />
+					</dd>
+					<dt class="small">
+						<label class="form-label" for="member_email2">Additional Email</label>
+					</dt>
+					<dd>
+						<input class="form-control form-control-sm" type="email" name="email2" id="member_email2" />
+					</dd>
+                    <dt class="small">
+						<label class="form-label" for="member_phone">Phone</label>
+					</dt>
+					<dd>
+						<input type="text" class="form-control form-control-sm" name="phone" id="member_phone" />
+					</dd>
+					<dt class="small">
+						<label class="form-label" for="member_category">Membership Category</label>
+					</dt>
+					<dd>
+						<select id="member_category" class="form-control form-select" name="category">
+						  	{% for cat in categories %}
+							<option value="{{ cat }}">{{ cat }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+					<dt class="small">
+						<label class="form-label" for="member_active">Active Member?</label>
+					</dt>
+					<dd>
+						<input type="checkbox" class="form-check-input" name="active" id="member_active" checked/>
+					</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+			<div class="card border shadow p-3">
+				<h5 class="card-header">Address</h5>
+				<div class="card-body">
+					<dl class="mb-n2">
+						<dt class="small">
+							<label class="form-label" for="member_addr1">Address Line 1</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="addr1" id="member_addr1" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_addr2">Address Line 2</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="addr2" id="member_addr2" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_addr3">Address Line 3</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="addr3" id="member_addr3" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_city">City</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="city" id="member_city" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_zip">Zip Code</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="zipcode" id="member_zip" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_country">Country</label>
+						</dt>
+						<dd>
+							<select id="member_country" class="form-control form-select" name="country">
+							  	{% for cnt in countries %}
+								<option value="{{ cnt }}">{{ cnt }}</option>
+							  	{% endfor %}
+							</select>
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_notes">Notes / Comments</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="text" name="notes" id="member_notes" />
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_medium">Desired Contact Medium</label>
+						</dt>
+						<dd>
+							<select id="member_medium" class="form-control form-select" name="medium">
+								{% for med in media %}
+								<option value="{{ med }}">{{ med }}</option>
+							  	{% endfor %}
+							</select>
+						</dd>
+						<dt class="small">
+							<label class="form-label" for="member_joined">Joined IAFPA</label>
+						</dt>
+						<dd>
+							<input class="form-control form-control-sm" type="date" value="{{ today_date }}" name="joined" id="member_joined" />
+						</dd>
+					</dl>
+				</div>
+            </div>
+        </div>
+		<div class="col my-2">
+			<input class="btn btn-primary" type="submit" value="Save">
+		</div>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% set active_page = 'members' %}
+
+{% block content %}
+<h1 class="my-3">{% block title %}{{ title }}{% endblock %}</h1>
+
+{% if emails|length > 1 or add %}
+<div class="row">
+    {% if emails|length > 1 %}
+    <div class="col my-2">
+        <button class="btn btn-primary mb-2" type="button" data-bs-toggle="modal" data-bs-target="#emailModal">Show Primary E-Mail Addresses</button>
+    </div>
+    {% endif %}
+    {% if emails_all|length > 1 %}
+    <div class="col my-2">
+        <button class="btn btn-primary mb-2" type="button" data-bs-toggle="modal" data-bs-target="#emailAllModal">Show All E-Mail Addresses</button>
+    </div>
+    {% endif %}
+    {% if add %}
+    <div class="col my-2">
+        <a class="btn btn-success mb-2" href="{{ url_for('people.add_new_member') }}">Add New Member</a>
+    </div>
+    {% endif %}
+    <div class="col my-2">
+        <a class="btn btn-secondary mb-2" id="hideButton">Hide Selected Rows</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col">
+        <table class="table table-bordered table-hover table-striped dt-responsive" id="peopleTable">
+            <thead class="thead-light">
+            <tr>
+                <th>Title</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Category</th>
+                <th>Comment</th>
+                <th>Act.</th>
+                <th>Email</th>
+            </tr>
+            <thead>
+            <tbody>
+            {% for member in members %}
+            <tr>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{% if member.title %}{{ member.title }}{% endif
+                    %}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{{ member.firstname }}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{{ member.lastname }}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{% if member.city %}{{ member.city }}{% endif
+                    %}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{% if member.country %}{{ member.country }}{%
+                    endif %}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{{ member.category }}</a></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{% if member.notes %}{{ member.notes }}{% endif
+                    %}</a></td>
+                <td><span class="badge bg-{% if member.active == true %}success">yes{% else %}danger">no{% endif %}</span></td>
+                <td><a class="link-dark" href="/people/{{ member.id }}">{{ member.email1 }}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Emails -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="emailModalLabel">Primary Emails</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">Copy the {{ emails.split(';')|length }} email addresses below:</p>
+          <input class="form-control" type="text" value="{{ emails }}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Emails All-->
+  <div class="modal fade" id="emailAllModal" tabindex="-1" aria-labelledby="emailAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="emailAllModalLabel">All Emails</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">Copy the {{ emails_all.split(';')|length }} email addresses below:</p>
+          <input class="form-control" type="text" value="{{ emails_all }}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script nonce="{{ csp_nonce() }}">
+$(document).ready(function() {
+    var table = $('#peopleTable').DataTable();
+
+    $('#peopleTable tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+
+    $('#hideButton').click( function () {
+        table.row('.selected').remove().draw( false );
+    });
+
+});
+</script>
+{% endblock %}

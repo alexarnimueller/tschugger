@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% set active_page = 'dashboard' %}
+
+{% block header %}
+{{ super() }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style nonce="{{ csp_nonce() }}">
+  #map {
+      height: 500px;
+      max-width: 100%;
+      margin: auto;
+      position: relative;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 text-center my-2">
+    <h1>Dashboard</h1>
+  </div>
+  <div class="col-sm-12 my-2">
+    <div class="card border shadow">
+      <h5 class="card-header">Map of all Members</h5>
+      <div class="card-body text-center">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-6 my-2">
+    <div class="card border shadow">
+      <h5 class="card-header">New Members</h5>
+      <div class="card-body">
+        <canvas id="memberChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 my-2">
+    <div class="card border shadow">
+      <h5 class="card-header">Payments</h5>
+      <div class="card-body">
+        <canvas id="paymentChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-6 my-2">
+    <div class="card border shadow">
+      <h5 class="card-header">Membership Categories</h5>
+      <div class="card-body">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script nonce="{{ csp_nonce() }}">
+// data for map
+var members = {{ members | tojson() }};
+
+// data for charts
+var members_years = {{ member_years }};
+var members_nums = {{ member_nums }};
+var payments_years = {{ payments_years | tojson() }};
+var payments_nums = {{ payments_nums }};
+var payments_sums = {{ payments_sums }};
+var categories = {{ categories | tojson() }};
+var category_nums = {{ category_nums }};
+</script>
+<script nonce="{{ csp_nonce() }}" type="text/javascript" src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script nonce="{{ csp_nonce() }}" type="text/javascript" src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}
