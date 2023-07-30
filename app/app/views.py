@@ -15,7 +15,7 @@ def inject_today_date():
 
 @bp.route("/", methods=("GET",))
 def index():
-    return render_template("index.html")
+    return render_template("tschugger.html")
 
 
 @bp.route("/dashboard", methods=("GET", "POST"))
