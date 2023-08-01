@@ -15,7 +15,7 @@ class UserRegistrationForm(FlaskForm):
     )
 
 
-class ApplicationForm(FlaskForm):
+class ProfileForm(FlaskForm):
     firstname = StringField(
         "Vorname",
         validators=[
