@@ -1,7 +1,7 @@
 import os
 from collections import OrderedDict
 from flask import Blueprint
-from flask import render_template, url_for
+from flask import render_template
 from datetime import date
 from auth import login_required
 from models import Member
@@ -16,8 +16,7 @@ def inject_today_date():
 
 @bp.route("/", methods=("GET",))
 def index():
-    imgs = os.listdir("static/images")
-    return render_template("tschugger.html", imgs=imgs)
+    return render_template("index.html")
 
 
 @bp.route("/dashboard", methods=("GET", "POST"))

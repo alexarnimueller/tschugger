@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
-{% set active_page = 'index' %}
+{% set active_page = 'members' %}
 
 {% block content %}
+<h1 class="my-3">{% block title %}{{ title }}{% endblock %}</h1>
 <div class="container mx-auto mt-4">
   <div class="row">
-  {% for img in imgs %}
+  {% for member in members %}
     <div class="col-md-4">
       <div class="card" style="width: 18rem;">
-        <img src="/static/images/{{img}}" class="card-img-top" alt="...">
+        <a href="people/{{member.id}}">
+          <img src="/static/images/{{member.img}}" class="card-img-top" alt="">
+        </a>
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn mr-2"><i class="fas fa-link"></i> Visit Site</a>
-          <a href="#" class="btn "><i class="fab fa-github"></i> Github</a>
+          <h5 class="card-title">{{member.username}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{member.firstname}} {{member.lastname}} / {{member.scoutname}}</h6>
+          <p class="card-text">{{member.notes}}</p>
+          <a href="people/{{member.id}}" class="btn"><i class="fa fa-user"></i> Profil</a>
         </div>
       </div>
     </div>

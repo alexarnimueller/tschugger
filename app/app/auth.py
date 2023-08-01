@@ -12,7 +12,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from __init__ import db
-from models import AppUser
+from models import Member
 
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -24,7 +24,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for("views.index"))
+            return redirect(url_for("auth.login"))
         return view(**kwargs)
 
     return wrapped_view
@@ -38,7 +38,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = AppUser.query.filter_by(id=user_id).first_or_404(
+        g.user = Member.query.filter_by(id=user_id).first_or_404(
             description="There is no user with ID {}".format(user_id)
         )
 
@@ -62,14 +62,14 @@ def register():
             error = "Username is required."
         elif not d["password"]:
             error = "Password is required."
-        elif AppUser.query.filter_by(username=d["username"]).first() is not None:
+        elif Member.query.filter_by(username=d["username"]).first() is not None:
             error = f"User {d['username']} is already registered."
-        elif AppUser.query.filter_by(email=d["email"]).first() is not None:
+        elif Member.query.filter_by(email=d["email"]).first() is not None:
             error = f"Email {d['email']} is already in use."
 
         if error is None:
             d["password"] = generate_password_hash(d["password"])
-            new_user = AppUser(**d)
+            new_user = Member(**d)
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for("auth.logout"))
@@ -86,7 +86,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        user = AppUser.query.filter_by(username=username).first()
+        user = Member.query.filter_by(username=username).first()
         if not user:
             error = "Unknown username."
         elif not check_password_hash(user.password, password):
@@ -105,20 +105,20 @@ def login():
 @bp.route("/users")
 @login_required
 def users():
-    usrs = AppUser.query.all()
+    usrs = Member.query.all()
     return render_template("auth/users.html", users=usrs)
 
 
 @bp.route("/users/edit/<userid>", methods=("GET", "POST"))
 @login_required
 def edit_user(userid):
-    usr = AppUser.query.filter_by(id=userid).first()
+    usr = Member.query.filter_by(id=userid).first()
     if request.method == "POST":
         d = dict()
         d["username"] = request.form["username"]
         d["password"] = generate_password_hash(request.form["password"])
         d["email"] = request.form["email"]
-        _ = AppUser.query.filter_by(id=userid).update(d)
+        _ = Member.query.filter_by(id=userid).update(d)
         db.session.commit()
 
         flash(f"User '{d['username']}' updated")
@@ -131,7 +131,7 @@ def edit_user(userid):
 @bp.route("/users/delete/<userid>", methods=("GET",))
 @login_required
 def delete_user(userid):
-    usr = AppUser.query.filter_by(id=userid).first()
+    usr = Member.query.filter_by(id=userid).first()
     db.session.delete(usr)
     db.session.commit()
 

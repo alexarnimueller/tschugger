@@ -47,17 +47,14 @@ def index():
             + ";".join([m.email2 for m in members if m.email2]),
         )
     else:
-        title = "All Members"
+        title = "Patrouille"
         members = Member.query.all()
+        imgs = os.listdir("static/images")
         return render_template(
-            "people/people.html",
+            "tschugger.html",
             title=title,
             members=members,
-            add=True,
-            emails=";".join([m.email1 for m in members if m.email1]),
-            emails_all=";".join([m.email1 for m in members if m.email1])
-            + ";"
-            + ";".join([m.email2 for m in members if m.email2]),
+            imgs=imgs,
         )
 
 
