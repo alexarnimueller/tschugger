@@ -33,3 +33,23 @@ body {
     box-shadow: #222 1px 0 10px;
     text-decoration: underline;
 }
+
+/* unvisited link */
+a:link {
+    color: #dd2476;
+}
+
+/* visited link */
+a:visited {
+    color: #dd2476;
+}
+
+/* mouse over link */
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+a:active {
+    color: white;
+}
