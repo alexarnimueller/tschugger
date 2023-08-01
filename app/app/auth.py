@@ -64,7 +64,7 @@ def register():
             flash(f"{user.username}  registriert.", "success")
             return requests.post((url_for("people.add")), json=user, headers={"Content-Type": "application/json"})
         else:
-            flash(error, "error")
+            flash(error, "danger")
     return render_template("auth/register.html", form=form)
 
 
@@ -87,7 +87,7 @@ def login():
             session["user_id"] = user.id
             return redirect(url_for("index"))
 
-        flash(error, "error")
+        flash(error, "danger")
     return render_template("auth/login.html")
 
 
