@@ -2,63 +2,74 @@
 {% set active_page = 'members' %}
 
 {% block content %}
-<h1 class="my-3">{% block title %}Profil erstellen{% endblock %}</h1>
+<div class="row">
+  <div class="col-md-12 text-center my-2">
+    <h1>Profil erstellen</h1>
+  </div>
+  <div class="col-sm-12 my-2">
+    <div class="card border shadow p-3">
+      <div class="card-body">
+		<form class="row g-3" method="post" enctype="multipart/form-data">
+			{{ form.csrf_token }}
+			<input type="hidden" name="id" value="{{ member.id }}">
+			<dl class="mb-n2">
+				<dt class="small">
+					{{ form.firstname.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.firstname(class_="form-control") }}
+				</dd>
+				{% if form.firstname.errors %}
+					<ul class="errors">
+					{% for error in form.firstname.errors %}
+						<li class="text-danger my-1">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
 
-<form id="add_member" accept-charset="UTF-8" method="post">
-	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-	<input type="hidden" name="id" value="{{ id }}">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="card border shadow p-3">
-				<dl class="mb-n2">
-                    <dt class="small">
-						<label class="form-label" for="member_firstname">First Name</label>
-					</dt>
-					<dd>
-						<input class="form-control form-control-sm" type="text" name="firstname" id="member_firstname" />
-					</dd>
-                    <dt class="small">
-						<label class="form-label" for="member_lastname">Last Name</label>
-					</dt>
-					<dd>
-						<input class="form-control form-control-sm" type="text" name="lastname" id="member_lastname" />
-					</dd>
-        			<dt class="small">
-						<label class="form-label" for="member_email1">Email</label>
-					</dt>
-					<dd>
-						<input class="form-control form-control-sm" type="email" name="email1" id="member_email1" />
-					</dd>
-					<dt class="small">
-						<label class="form-label" for="member_email2">Additional Email</label>
-					</dt>
-					<dd>
-						<input class="form-control form-control-sm" type="email" name="email2" id="member_email2" />
-					</dd>
-                    <dt class="small">
-						<label class="form-label" for="member_phone">Phone</label>
-					</dt>
-					<dd>
-						<input type="text" class="form-control form-control-sm" name="phone" id="member_phone" />
-					</dd>
-					<dt class="small">
-						<label class="form-label" for="member_category">Membership Category</label>
-					</dt>
-					<dd>
-						<select id="member_category" class="form-control form-select" name="category">
-						  	{% for cat in categories %}
-							<option value="{{ cat }}">{{ cat }}</option>
-							{% endfor %}
-						</select>
-					</dd>
-					<dt class="small">
-						<label class="form-label" for="member_active">Active Member?</label>
-					</dt>
-					<dd>
-						<input type="checkbox" class="form-check-input" name="active" id="member_active" checked/>
-					</dd>
-                </dl>
-            </div>
+				<dt class="small">
+					{{ form.lastname.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.lastname(class_="form-control") }}
+				</dd>
+				{% if form.lastname.errors %}
+					<ul class="errors">
+					{% for error in form.lastname.errors %}
+						<li class="text-danger my-1">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+
+				<dt class="small">
+					{{ form.scoutname.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.scoutname(class_="form-control") }}
+				</dd>
+				{% if form.scoutname.errors %}
+					<ul class="errors">
+					{% for error in form.scoutname.errors %}
+						<li class="text-danger my-1">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+
+				<dt class="small">
+					{{ form.email.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.email(class_="form-control", value=member.email) }}
+				</dd>
+				{% if form.email.errors %}
+					<ul class="errors">
+					{% for error in form.email.errors %}
+						<li class="text-danger my-1">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			</dl>
+            
         </div>
 		<div class="col my-2">
 			<input class="btn btn-primary" type="submit" value="Speichern">
