@@ -45,7 +45,6 @@ def load_logged_in_user():
 
 
 @bp.route("/register", methods=("GET", "POST"))
-@login_required
 def register():
     error = ""
     form = UserRegistrationForm()
@@ -64,7 +63,7 @@ def register():
             return redirect(url_for("people.index"))
         else:
             flash(error, "error")
-    return render_template("auth/register.html")
+    return render_template("auth/register.html", form=form)
 
 
 @bp.route("/login", methods=("GET", "POST"))
