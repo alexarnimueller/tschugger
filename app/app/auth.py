@@ -51,15 +51,15 @@ def register():
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
-        if Member.query.filter_by(username=user.username.data).first() is not None:
+        if Member.query.filter_by(username=user.username).first() is not None:
             error += f"User existiert schon! "
-        if Member.query.filter_by(email=user.email.data).first() is not None:
+        if Member.query.filter_by(email=user.email).first() is not None:
             error += f"Email schon in gebrauch!"
         if not error:
-            user.password.data = generate_password_hash(user.password.data)
+            user.password = generate_password_hash(user.password)
             db.session.add(user)
             db.session.commit()
-            flash(f"{form.username.data}  registriert.", "success")
+            flash(f"{form.username}  registriert.", "success")
             return redirect(url_for("people.index"))
         else:
             flash(error, "error")
