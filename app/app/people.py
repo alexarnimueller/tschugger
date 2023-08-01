@@ -1,8 +1,7 @@
-import os
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 import logging
 from __init__ import db
-from datetime import date, datetime
+from datetime import date
 from models import Member, AppUser
 from auth import login_required
 
@@ -15,12 +14,10 @@ logger = logging.getLogger(__name__)
 def index():
     title = "Patrouille"
     members = Member.query.all()
-    imgs = os.listdir("static/images")
     return render_template(
         "tschugger.html",
         title=title,
         members=members,
-        imgs=imgs,
     )
 
 
@@ -54,7 +51,7 @@ def get_member_details(memberid):
     )
 
 
-@bp.route("/add", methods=("POST"))
+@bp.route("/add", methods="POST")
 @login_required
 def add_new_member():
     """Add a new member to the DB"""
