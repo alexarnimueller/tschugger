@@ -53,7 +53,7 @@ def get_member_details(memberid):
 
 @bp.route("/add", methods=["POST"])
 @login_required
-def add_new_member():
+def add():
     """Add a new member to the DB"""
     if "username" in request.form:  # coming from first registration
         details = {"id": request.form["id"], "email": request.form["email"]}
