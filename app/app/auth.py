@@ -59,7 +59,7 @@ def register():
             user.password = generate_password_hash(user.password)
             db.session.add(user)
             db.session.commit()
-            flash(f"{form.username}  registriert.", "success")
+            flash(f"{user.username}  registriert.", "success")
             return redirect(url_for("people.index"))
         else:
             flash(error, "error")

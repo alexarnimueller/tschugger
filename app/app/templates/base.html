@@ -55,8 +55,8 @@
     </nav>
     {% endblock %}
 
-    {% for message in get_flashed_messages() %}
-      <div class="m-2 alert alert-warning alert-dismissible fade show" role="alert">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <div class="m-2 alert alert-{{category}} alert-dismissible fade show" role="alert">
         {{ message }}
       </div>
     {% endfor %}
