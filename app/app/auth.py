@@ -39,7 +39,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = Member.query.filter_by(id=user_id).first_or_404(
+        g.user = AppUser.query.filter_by(id=user_id).first_or_404(
             description="There is no user with ID {}".format(user_id)
         )
 
@@ -92,14 +92,14 @@ def login():
 @bp.route("/users")
 @login_required
 def users():
-    usrs = Member.query.all()
+    usrs = AppUser.query.all()
     return render_template("auth/users.html", users=usrs)
 
 
 @bp.route("/users/edit/<userid>", methods=("GET", "POST"))
 @login_required
 def edit_user(userid):
-    usr = Member.query.filter_by(id=userid).first()
+    usr = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
         d = dict()
         d["username"] = request.form["username"]
@@ -118,7 +118,7 @@ def edit_user(userid):
 @bp.route("/users/delete/<userid>", methods=("GET",))
 @login_required
 def delete_user(userid):
-    usr = Member.query.filter_by(id=userid).first()
+    usr = AppUser.query.filter_by(id=userid).first()
     db.session.delete(usr)
     db.session.commit()
 
