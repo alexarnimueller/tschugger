@@ -51,7 +51,7 @@ def get_member_details(memberid):
     )
 
 
-@bp.route("/add", methods="POST")
+@bp.route("/add", methods=["POST"])
 @login_required
 def add_new_member():
     """Add a new member to the DB"""
