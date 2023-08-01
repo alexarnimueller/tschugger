@@ -73,7 +73,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        user = Member.query.filter_by(username=username).first()
+        user = AppUser.query.filter_by(username=username).first()
         if not user:
             error = "Unknown username."
         elif not check_password_hash(user.password, password):
