@@ -173,24 +173,6 @@ def inactive():
     )
 
 
-@bp.route("/equinox", methods=("GET",))
-@login_required
-def equinox():
-    # equinoxlist = Member.query.filter_by(equinox=True)
-    right_category = Member.query.filter(not_(Member.category.like("%minus%")), Member.active).all()
-    # members = list(set(list(equinoxlist) + list(right_category)))
-    members = right_category
-    return render_template(
-        "people/people.html",
-        title=f"Equinox List Members",
-        members=members,
-        emails=";".join([m.email1 for m in members if m.email1]),
-        emails_all=";".join([m.email1 for m in members if m.email1])
-        + ";"
-        + ";".join([m.email2 for m in members if m.email2]),
-    )
-
-
 @bp.route("/delete_pdf/<memberid>", methods=("GET",))
 @login_required
 def delete_pdf(memberid):
@@ -200,33 +182,3 @@ def delete_pdf(memberid):
 @bp.context_processor
 def inject_today_date():
     return {"today_date": date.today()}
-
-
-def address_to_coords(address_string: str):
-    """Translate an address into lat and lon coordinates using the openstreetmap API."""
-    apikey = os.getenv("GOOGLE_APIKEY")
-    url = f"https://maps.googleapis.com/maps/api/geocode/json?address={address_string}&key={apikey}"
-    response = requests.get(url)
-    data = response.json()
-    try:
-        rslt = data["results"][0]["geometry"]["location"]
-        return [float(rslt["lat"]), float(rslt["lng"])]
-    except IndexError:
-        return [None, None]
-
-
-def coords_for_members():
-    """Translate the address to coordinates for all members which don't yet have them."""
-    members = Member.query.all()
-    for m in members:
-        print(f"processing coordinates for {m} ...")
-        if any([m.addr1, m.addr2, m.addr3, m.city]):
-            address = f"{m.zipcode} {m.city}, {m.country}".replace("None", "").replace(", , ", ", ")
-            lat, lon = address_to_coords(address)
-            print(f"\tFound {lat:.4f} {lon:.4f}")
-            m.lat, m.lon = lat, lon
-            db.session.commit()
-            if lat is None:
-                print("\tNot found")
-        else:
-            print("\tNo address")

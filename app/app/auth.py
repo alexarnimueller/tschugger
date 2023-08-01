@@ -10,9 +10,10 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
+from forms import UserRegistrationForm
+from models import AppUser, Member
 
 from __init__ import db
-from models import Member
 
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -46,36 +47,23 @@ def load_logged_in_user():
 @bp.route("/register", methods=("GET", "POST"))
 @login_required
 def register():
-    """Register a new user. Can only be done by already registered users.
-
-    Validates that the username is not already taken. Hashes the
-    password for security.
-    """
-    if request.method == "POST":
-        d = dict()
-        d["username"] = request.form["username"]
-        d["password"] = request.form["password"]
-        d["email"] = request.form["email"]
-        error = None
-
-        if not d["username"]:
-            error = "Username is required."
-        elif not d["password"]:
-            error = "Password is required."
-        elif Member.query.filter_by(username=d["username"]).first() is not None:
-            error = f"User {d['username']} is already registered."
-        elif Member.query.filter_by(email=d["email"]).first() is not None:
-            error = f"Email {d['email']} is already in use."
-
-        if error is None:
-            d["password"] = generate_password_hash(d["password"])
-            new_user = Member(**d)
-            db.session.add(new_user)
+    error = ""
+    form = UserRegistrationForm()
+    if form.validate_on_submit():
+        user = AppUser()
+        form.populate_obj(user)
+        if Member.query.filter_by(username=user.username.data).first() is not None:
+            error += f"User existiert schon! "
+        if Member.query.filter_by(email=user.email.data).first() is not None:
+            error += f"Email schon in gebrauch!"
+        if not error:
+            user.password.data = generate_password_hash(user.password.data)
+            db.session.add(user)
             db.session.commit()
-            return redirect(url_for("auth.logout"))
-
-        flash(error)
-
+            flash(f"{form.username.data}  registriert.", "success")
+            return redirect(url_for("people"))
+        else:
+            flash(error, "error")
     return render_template("auth/register.html")
 
 
@@ -98,7 +86,7 @@ def login():
             session["user_id"] = user.id
             return redirect(url_for("index"))
 
-        flash(error)
+        flash(error, "error")
     return render_template("auth/login.html")
 
 
@@ -121,7 +109,7 @@ def edit_user(userid):
         _ = Member.query.filter_by(id=userid).update(d)
         db.session.commit()
 
-        flash(f"User '{d['username']}' updated")
+        flash(f"User '{d['username']}' updated", "success")
 
         return redirect(url_for("auth.users"))
 
@@ -135,7 +123,7 @@ def delete_user(userid):
     db.session.delete(usr)
     db.session.commit()
 
-    flash(f"User '{usr.username}' deleted")
+    flash(f"User '{usr.username}' deleted", "success")
 
     return redirect(url_for("auth.users"))
 
