@@ -51,9 +51,9 @@ def register():
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
-        if Member.query.filter_by(username=user.username).first() is not None:
+        if AppUser.query.filter_by(username=user.username).first() is not None:
             error += f"User existiert schon! "
-        if Member.query.filter_by(email=user.email).first() is not None:
+        if AppUser.query.filter_by(email=user.email).first() is not None:
             error += f"Email schon in gebrauch!"
         if not error:
             user.password = generate_password_hash(user.password)
