@@ -59,8 +59,10 @@ def register():
             user.password = generate_password_hash(user.password)
             db.session.add(user)
             db.session.commit()
+            session.clear()  # log user in
+            session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            return redirect(url_for("people.index"))
+            return redirect(url_for("people.add"))
         else:
             flash(error, "error")
     return render_template("auth/register.html", form=form)

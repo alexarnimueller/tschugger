@@ -1,12 +1,10 @@
 import os
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-import requests
 import logging
 from __init__ import db
 from datetime import date, datetime
-from models import Member
+from models import Member, AppUser
 from auth import login_required
-from sqlalchemy import not_
 
 bp = Blueprint("people", __name__, url_prefix="/people")
 logger = logging.getLogger(__name__)
@@ -15,47 +13,15 @@ logger = logging.getLogger(__name__)
 @bp.route("/", methods=("GET", "POST"))
 @login_required
 def index():
-    """Show all the members in alphabetical order by lastname"""
-    if request.method == "POST":
-        firstname = "%" + request.form["inputName"] + "%"
-        lastname = "%" + request.form["inputLastName"] + "%"
-        email = "%" + request.form["inputEmail"] + "%"
-        category = sorted(request.form.getlist("inputCategory"))
-        medium = "%" + request.form["inputMedium"] + "%"
-        country = "%" + request.form["inputCountry"] + "%"
-        active = [True] if request.form.get("activeCheck") else [True, False]
-        afterdate = request.form["afterDate"] if request.form["afterDate"] else "2010-01-01"
-        befordate = request.form["beforeDate"] if request.form["beforeDate"] else date.today().strftime("%Y-%m-%d")
-        members = Member.query.filter(
-            Member.firstname.like(firstname),
-            Member.lastname.like(lastname),
-            (Member.email1.like(email) | Member.email2.like(email)),
-            Member.joined.between(afterdate, befordate),
-            Member.category.in_(category),
-            Member.country.like(country),
-            Member.medium.like(medium),
-            Member.active.in_(active),
-        ).all()
-        srchstrng = firstname + " " + lastname + " " + email + " " + " " + medium + " " + country
-        return render_template(
-            "people/people.html",
-            title=f"Search Result For \"{srchstrng.replace('%', '').strip()}\"",
-            members=members,
-            emails=";".join([m.email1 for m in members if m.email1]),
-            emails_all=";".join([m.email1 for m in members if m.email1])
-            + ";"
-            + ";".join([m.email2 for m in members if m.email2]),
-        )
-    else:
-        title = "Patrouille"
-        members = Member.query.all()
-        imgs = os.listdir("static/images")
-        return render_template(
-            "tschugger.html",
-            title=title,
-            members=members,
-            imgs=imgs,
-        )
+    title = "Patrouille"
+    members = Member.query.all()
+    imgs = os.listdir("static/images")
+    return render_template(
+        "tschugger.html",
+        title=title,
+        members=members,
+        imgs=imgs,
+    )
 
 
 @bp.route("/<memberid>", methods=("GET", "POST"))
@@ -67,42 +33,24 @@ def get_member_details(memberid):
     :return: a form containing all the member information
     :raise 404: if the member does not exist
     """
-    pdf = ""
     if request.method == "POST":
         d = dict()
-        d["title"] = request.form["title"]
         d["firstname"] = request.form["firstname"]
         d["lastname"] = request.form["lastname"]
-        d["email1"] = request.form["email1"]
-        d["email2"] = request.form["email2"]
+        d["scoutname"] = request.form["scoutname"]
+        d["email"] = request.form["email"]
         d["phone"] = request.form["phone"]
-        if request.form.get("active"):
-            d["active"] = True
-        else:
-            d["active"] = False
-        d["category"] = request.form["category"]
-        d["medium"] = request.form["medium"]
         d["notes"] = request.form["notes"]
-
-        d["addr1"] = request.form["addr1"]
-        d["addr2"] = request.form["addr2"]
-        d["addr3"] = request.form["addr3"]
-        d["city"] = request.form["city"]
-        d["zipcode"] = request.form["zipcode"]
-        d["country"] = request.form["country"]
-        d["joined"] = datetime.fromisoformat(request.form["joined"])
-        # d["pdf"] = request.file["country"].read()
-        pdf = "testfile.pdf"
+        d["img"] = request.form["img"]
         _ = Member.query.filter_by(id=memberid).update(d)
         db.session.commit()
-        flash(f"Member {d['firstname']} {d['lastname']} updated")
+        flash(f"Tschugger {d['scoutname']} updated", "success")
 
     memberdetails = Member.query.filter_by(id=memberid).first()
 
     return render_template(
         "people/member.html",
         member=memberdetails,
-        pdf=pdf,
     )
 
 
@@ -111,42 +59,21 @@ def get_member_details(memberid):
 def add_new_member():
     """Add a new member to the DB"""
     if request.method == "POST":
-        d, ad = dict(), dict()
-        d["email1"] = request.form["email1"]
-        d["email2"] = request.form["email2"]
-        rslt1 = Member.query.filter_by(email1=d["email1"]).first()
-        rslt2 = Member.query.filter_by(email1=d["email2"]).first()
-        if rslt1:
-            flash(f"Email address '{d['email1']}' already exists in the database!")
-        elif rslt2:
-            flash(f"Email address '{d['email2']}' already exists in the database!")
-        else:
-            last_member = Member.query.order_by(Member.id.desc()).first()
-            d["id"] = last_member.id + 1
-            d["title"] = request.form["title"]
-            d["firstname"] = request.form["firstname"]
-            d["lastname"] = request.form["lastname"]
-            d["phone"] = request.form["phone"]
-            if request.form.get("active"):
-                d["active"] = True
-            else:
-                d["active"] = False
-            d["category"] = request.form["category"]
-            d["medium"] = request.form.get("medium", "online")
-            d["notes"] = request.form["notes"]
-            d["addr1"] = request.form["addr1"]
-            d["addr2"] = request.form["addr2"]
-            d["addr3"] = request.form["addr3"]
-            d["city"] = request.form["city"]
-            d["zipcode"] = request.form["zipcode"]
-            d["country"] = request.form["country"]
-            d["joined"] = datetime.fromisoformat(request.form["joined"])
+        d = dict()
+        d["id"] = request.form["id"]
+        d["firstname"] = request.form["firstname"]
+        d["lastname"] = request.form["lastname"]
+        d["scoutname"] = request.form["scoutname"]
+        d["email"] = request.form["email"]
+        d["phone"] = request.form["phone"]
+        d["notes"] = request.form["notes"]
+        d["img"] = request.form["img"]
 
-            record = Member(**d)
-            db.session.add(record)
-            db.session.commit()
+        record = Member(**d)
+        db.session.add(record)
+        db.session.commit()
 
-            flash(f"New member {d['firstname']} {d['lastname']} created")
+        flash(f"New member {d['firstname']} {d['lastname']} created")
 
     return render_template("people/new.html")
 
