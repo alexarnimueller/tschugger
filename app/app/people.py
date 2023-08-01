@@ -54,11 +54,14 @@ def get_member_details(memberid):
     )
 
 
-@bp.route("/add", methods=("GET", "POST"))
+@bp.route("/add", methods=("POST"))
 @login_required
 def add_new_member():
     """Add a new member to the DB"""
-    if request.method == "POST":
+    if "username" in request.form:  # coming from first registration
+        details = {"id": request.form["id"], "email": request.form["email"]}
+        return render_template("people/new.html", member=details)
+    else:
         d = dict()
         d["id"] = request.form["id"]
         d["firstname"] = request.form["firstname"]
@@ -68,14 +71,11 @@ def add_new_member():
         d["phone"] = request.form["phone"]
         d["notes"] = request.form["notes"]
         d["img"] = request.form["img"]
-
         record = Member(**d)
         db.session.add(record)
         db.session.commit()
-
         flash(f"New member {d['firstname']} {d['lastname']} created")
-
-    return render_template("people/new.html")
+        return redirect("people.index")
 
 
 @bp.route("/nomail", methods=("GET",))

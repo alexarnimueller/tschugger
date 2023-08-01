@@ -1,5 +1,5 @@
 import functools
-
+import requests
 from flask import Blueprint
 from flask import flash
 from flask import g
@@ -62,7 +62,7 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            return redirect(url_for("people.add"))
+            return requests.post((url_for("people.add")), json=user, headers={"Content-Type": "application/json"})
         else:
             flash(error, "error")
     return render_template("auth/register.html", form=form)
