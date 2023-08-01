@@ -61,7 +61,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             flash(f"{form.username.data}  registriert.", "success")
-            return redirect(url_for("people"))
+            return redirect(url_for("people.index"))
         else:
             flash(error, "error")
     return render_template("auth/register.html")
