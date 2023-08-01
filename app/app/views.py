@@ -16,7 +16,7 @@ def inject_today_date():
 
 @bp.route("/", methods=("GET",))
 def index():
-    imgs = os.listdir(url_for("static", filename="images"))
+    imgs = os.listdir("static/images")
     return render_template("tschugger.html", imgs=imgs)
 
 
