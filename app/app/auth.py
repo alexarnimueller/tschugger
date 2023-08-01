@@ -10,7 +10,7 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from forms import UserRegistrationForm
+from forms import UserRegistrationForm, ProfileForm
 from models import AppUser, Member
 
 from __init__ import db
@@ -62,7 +62,7 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            return requests.post((url_for("people.add")), json=user, headers={"Content-Type": "application/json"})
+            return render_template("people/new.html", member=user, form=ProfileForm())
         else:
             flash(error, "danger")
     return render_template("auth/register.html", form=form)
