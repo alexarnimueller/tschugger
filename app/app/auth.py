@@ -48,6 +48,7 @@ def load_logged_in_user():
 def register():
     error = ""
     form = UserRegistrationForm()
+    profile = ProfileForm()
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
@@ -62,7 +63,7 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            return render_template("people/new.html", member=user, form=ProfileForm())
+            return render_template("people/new.html", member=user, form=profile)
         else:
             flash(error, "danger")
     return render_template("auth/register.html", form=form)

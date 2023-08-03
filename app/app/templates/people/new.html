@@ -10,7 +10,7 @@
     <div class="card border shadow p-3">
       <div class="card-body">
 		<form class="row g-3" method="post" action="{{url_for('people.add_new_member')}}" enctype="multipart/form-data">
-			{{ form.csrf_token }}
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 			<input type="hidden" name="id" value="{{ member.id }}">
 			<dl class="mb-n2">
 				<dt class="small">
