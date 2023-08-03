@@ -48,14 +48,14 @@ def load_logged_in_user():
 def register():
     error = ""
     form = UserRegistrationForm()
-    profile = ProfileForm()
+    profile = ProfileForm(csrf_enabled=False)
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
         if AppUser.query.filter_by(username=user.username).first() is not None:
-            error += f"User existiert schon! "
+            error += f"Username existiert schon! "
         if AppUser.query.filter_by(email=user.email).first() is not None:
-            error += f"Email schon in gebrauch!"
+            error += f"Email schon in Gebrauch!"
         if not error:
             user.password = generate_password_hash(user.password)
             db.session.add(user)
