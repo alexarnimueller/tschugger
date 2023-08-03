@@ -54,6 +54,9 @@ def create_app():
 
     app.add_url_rule("/", endpoint="index")
 
+    # exclude csrf for new profile after user registration
+    csrf.exempt("app.blueprints.people.add_new_member")
+
     # configure Talisman to handle CSP
     talisman = Talisman(
         app,

@@ -48,7 +48,7 @@ def load_logged_in_user():
 def register():
     error = ""
     form = UserRegistrationForm()
-    profile = ProfileForm(csrf_enabled=False)
+    profile = ProfileForm(meta={"csrf": False})
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
