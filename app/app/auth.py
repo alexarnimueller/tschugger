@@ -17,7 +17,6 @@ from __init__ import db
 
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
-logger = logging.getLogger(__name__)
 
 
 def login_required(view):
@@ -52,7 +51,7 @@ def register():
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
-        logging.info(f"{user}")
+        print(f"{user}")
         if AppUser.query.filter_by(username=user.username).first() is not None:
             error += f"Username existiert schon! "
         if AppUser.query.filter_by(email=user.email).first() is not None:
@@ -64,10 +63,10 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            logger.info(f"{user.username}  registered")
+            logging.info(f"{user.username}  registered")
             redirect(url_for("people.add_new_member"))
         else:
-            logger.warning(f"{error}")
+            logging.warning(f"{error}")
             flash(error, "danger")
     return render_template("auth/register.html", form=form)
 
