@@ -24,8 +24,7 @@
   {% block navbar %}
   
   {% set navigation_bar = [
-    (url_for('index'), 'index', 'Home'),
-    (url_for('people.index'), 'members', 'Tschugger'),
+    (url_for('people.index'), 'index', 'Tschugger'),
     (url_for('auth.users'), 'admin', 'Admin'),
     (url_for('auth.logout'), 'logout', 'Log Out')] %}
 
@@ -41,9 +40,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% if not g.user %}
-            <li class="nav-item active"><a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a></li>
-          {% else %}
+          {% if g.user %}
             {% for href, id, caption in navigation_bar %}
               <li class="nav-item"><a class="nav-link {% if id == active_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }}</a></li>
             {% endfor %}

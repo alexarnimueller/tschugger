@@ -58,10 +58,13 @@ def get_member_details(memberid):
     """
     change = False
     member = Member.query.filter_by(id=memberid).first()
+    logging.info(member)
     form = ProfileForm(obj=member)
     if memberid == session["user_id"]:
+        logging.info("member allowed to change info")
         change = True
         if form.validate_on_submit():
+            logging.info("form validated successfully")
             members = Member.query.all()
             imgs = set(os.listdir("static/images")).difference(set([m.img for m in members]))
             form.populate_obj(member)
