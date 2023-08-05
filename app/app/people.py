@@ -25,7 +25,7 @@ def index():
 @bp.route("/add", methods=("GET", "POST"))
 @login_required
 def add_new_member():
-    user = AppUser().query(id=session["user_id"])
+    user = AppUser.query.filter_by(id=session["user_id"]).first()
     profile = ProfileForm(id=session["user_id"], email=user.email)
     if profile.validate_on_submit():
         logger.info(f"new member form validated")
