@@ -62,7 +62,6 @@ def get_member_details(memberid):
     if memberid == session["user_id"]:
         change = True
         if form.validate_on_submit():
-            logging.info(f"new member form validated")
             members = Member.query.all()
             imgs = set(os.listdir("static/images")).difference(set([m.img for m in members]))
             form.populate_obj(member)

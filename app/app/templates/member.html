@@ -16,7 +16,7 @@
 					{{ form.firstname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.firstname(class_="form-control") }}
 					{% else %}
 						{{ form.firstname(class_="form-control", readonly=true) }}
@@ -34,7 +34,7 @@
 					{{ form.lastname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.lastname(class_="form-control") }}
 					{% else %}
 						{{ form.lastname(class_="form-control", readonly=true) }}
@@ -52,7 +52,7 @@
 					{{ form.scoutname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.scoutname(class_="form-control") }}
 					{% else %}
 						{{ form.scoutname(class_="form-control", readonly=true) }}
@@ -70,7 +70,7 @@
 					{{ form.email.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.email(class_="form-control") }}
 					{% else %}
 						{{ form.email(class_="form-control", readonly=true) }}
@@ -88,7 +88,7 @@
 					{{ form.phone.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.phone(class_="form-control") }}
 					{% else %}
 						{{ form.phone(class_="form-control", readonly=true) }}
@@ -106,7 +106,7 @@
 					{{ form.notes.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{% if change %}
+					{% if change == true %}
 						{{ form.notes(class_="form-control") }}
 					{% else %}
 						{{ form.notes(class_="form-control", readonly=true) }}
