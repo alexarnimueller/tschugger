@@ -1,6 +1,5 @@
 [![Website iafpa-db.ch](https://img.shields.io/website-up-down-green-red/http/flamberg-tschugger.ch.svg)](https://flamberg-tschugger.ch)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/alexarnimueller/iafpa-app)
 [![Maintainer](https://img.shields.io/badge/maintainer-alexarnimueller-blue)](https://github.com/alexarnimueller)
 

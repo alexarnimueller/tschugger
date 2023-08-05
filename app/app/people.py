@@ -33,7 +33,7 @@ def add_new_member():
     if form.validate_on_submit():
         logging.info(f"new member form validated")
         members = Member.query.all()
-        imgs = set(os.listdir(url_for("static", "images"))).difference(set([m.img for m in members]))
+        imgs = set(os.listdir("static/images")).difference(set([m.img for m in members]))
         member = Member()
         form.populate_obj(member)
         member.id = user.id
