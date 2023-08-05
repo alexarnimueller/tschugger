@@ -15,7 +15,7 @@
           <h5 class="card-title">{{member.username}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{member.firstname}} {{member.lastname}} / {{member.scoutname}}</h6>
           <p class="card-text">{{member.notes}}</p>
-          <a href="people/{{member.id}}" class="btn"><i class="fa fa-user"></i> Profil</a>
+          <a href="{{url_for('people.get_member_details', memberid=member.id}}" class="btn"><i class="fa fa-user"></i> Profil</a>
         </div>
       </div>
     </div>
