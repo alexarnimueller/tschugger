@@ -25,7 +25,7 @@ def access_required(view):
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if "access" not in g:
+        if g.access is None:
             return redirect(url_for("auth.access"))
         return view(**kwargs)
 
@@ -49,8 +49,10 @@ def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
     user_id = session.get("user_id")
-    if user_id is None:
+    access = session.get("access")
+    if user_id is None or access is None:
         g.user = None
+        g.access = None
     else:
         g.user = AppUser.query.filter_by(id=user_id).first_or_404(
             description="There is no user with ID {}".format(user_id)
