@@ -20,18 +20,6 @@ from __init__ import db
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
-def access_required(view):
-    """View decorator that redirects anonymous users to the login page."""
-
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.access is None:
-            return redirect(url_for("auth.access"))
-        return view(**kwargs)
-
-    return wrapped_view
-
-
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
 
@@ -49,10 +37,8 @@ def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
     the database into ``g.user``."""
     user_id = session.get("user_id")
-    access = session.get("access")
-    if user_id is None or access is None:
+    if user_id is None:
         g.user = None
-        g.access = None
     else:
         g.user = AppUser.query.filter_by(id=user_id).first_or_404(
             description="There is no user with ID {}".format(user_id)
@@ -65,7 +51,7 @@ def access():
     if request.method == "POST":
         password = request.form["password"]
         if os.getenv("ACCESS_PASSWORD") == password:
-            g.access = True
+            session["access"] = True
             return redirect(url_for("auth.register"))
 
         flash("Incorrect password!", "danger")
@@ -73,30 +59,31 @@ def access():
 
 
 @bp.route("/register", methods=("GET", "POST"))
-@access_required
 def register():
-    error = ""
-    form = UserRegistrationForm()
-    if form.validate_on_submit():
-        user = AppUser()
-        form.populate_obj(user)
-        if AppUser.query.filter_by(username=user.username).first() is not None:
-            error += f"Username {user.username} existiert schon! "
-        if AppUser.query.filter_by(email=user.email).first() is not None:
-            error += f"Email {user.email} schon in Gebrauch!"
-        if not error:
-            user.password = generate_password_hash(user.password)
-            db.session.add(user)
-            db.session.commit()
-            session.clear()  # log user in
-            session["user_id"] = user.id
-            flash(f"{user.username}  registriert.", "success")
-            logging.info(f"{user.username}  registered")
-            return redirect(url_for("people.add_new_member"))
-        else:
-            logging.warning(f"{error}")
-            flash(error.strip(), "danger")
-    return render_template("auth/register.html", form=form)
+    if session.get("access"):
+        error = ""
+        form = UserRegistrationForm()
+        if form.validate_on_submit():
+            user = AppUser()
+            form.populate_obj(user)
+            if AppUser.query.filter_by(username=user.username).first() is not None:
+                error += f"Username {user.username} existiert schon! "
+            if AppUser.query.filter_by(email=user.email).first() is not None:
+                error += f"Email {user.email} schon in Gebrauch!"
+            if not error:
+                user.password = generate_password_hash(user.password)
+                db.session.add(user)
+                db.session.commit()
+                session.clear()  # log user in
+                session["user_id"] = user.id
+                flash(f"{user.username}  registriert.", "success")
+                logging.info(f"{user.username}  registered")
+                return redirect(url_for("people.add_new_member"))
+            else:
+                logging.warning(f"{error}")
+                flash(error.strip(), "danger")
+        return render_template("auth/register.html", form=form)
+    return redirect(url_for("auth.access"))
 
 
 @bp.route("/login", methods=("GET", "POST"))
