@@ -2,7 +2,7 @@ from __init__ import db
 
 
 class Member(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, db.ForeignKey("appuser.id"), primary_key=True, nullable=False)
     firstname = db.Column(db.String(128), nullable=False)
     lastname = db.Column(db.String(128), nullable=False)
     scoutname = db.Column(db.String(128), nullable=False)

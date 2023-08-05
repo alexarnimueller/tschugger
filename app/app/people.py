@@ -4,6 +4,7 @@ from __init__ import db
 from datetime import date
 from models import Member, AppUser
 from auth import login_required
+from forms import ProfileForm
 
 bp = Blueprint("people", __name__, url_prefix="/people")
 logger = logging.getLogger(__name__)
@@ -23,32 +24,23 @@ def index():
 
 @bp.route("/<memberid>", methods=("GET", "POST"))
 @login_required
-def get_member_details(memberid):
+def get_member_details(member):
     """Get all member details by member id.
 
     :param memberid: member ID
     :return: a form containing all the member information
     :raise 404: if the member does not exist
     """
-    if request.method == "POST":
-        d = dict()
-        d["firstname"] = request.form["firstname"]
-        d["lastname"] = request.form["lastname"]
-        d["scoutname"] = request.form["scoutname"]
-        d["email"] = request.form["email"]
-        d["phone"] = request.form["phone"]
-        d["notes"] = request.form["notes"]
-        d["img"] = request.form["img"]
-        _ = Member.query.filter_by(id=memberid).update(d)
+    profile = ProfileForm()
+    if profile.validate_on_submit():
+        member = Member()
+        profile.populate_obj(member)
+        db.session.add(member)
         db.session.commit()
-        flash(f"Tschugger {d['scoutname']} updated", "success")
+        flash(f"Tschugger {member.scoutname} updated", "success")
+        redirect(url_for("views.index"))
 
-    memberdetails = Member.query.filter_by(id=memberid).first()
-
-    return render_template(
-        "people/member.html",
-        member=memberdetails,
-    )
+    return render_template("people/member.html", member=member, form=profile)
 
 
 @bp.route("/add", methods=["POST"])
