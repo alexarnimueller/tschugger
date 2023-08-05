@@ -22,15 +22,9 @@ def index():
     )
 
 
-@bp.route("/<memberid>", methods=("GET", "POST"))
+@bp.route("/add", methods=("GET", "POST"))
 @login_required
-def get_member_details(member):
-    """Get all member details by member id.
-
-    :param memberid: member ID
-    :return: a form containing all the member information
-    :raise 404: if the member does not exist
-    """
+def add_new_member(member):
     profile = ProfileForm()
     if profile.validate_on_submit():
         member = Member()
@@ -43,24 +37,34 @@ def get_member_details(member):
     return render_template("people/member.html", member=member, form=profile)
 
 
-@bp.route("/add", methods=["POST"])
+@bp.route("/<memberid>", methods=("GET", "POST"))
 @login_required
-def add_new_member():
-    """Add a new member to the DB"""
-    d = dict()
-    d["id"] = request.form["id"]
-    d["firstname"] = request.form["firstname"]
-    d["lastname"] = request.form["lastname"]
-    d["scoutname"] = request.form["scoutname"]
-    d["email"] = request.form["email"]
-    d["phone"] = request.form["phone"]
-    d["notes"] = request.form["notes"]
-    d["img"] = request.form["img"]
-    record = Member(**d)
-    db.session.add(record)
-    db.session.commit()
-    flash(f"New member {d['firstname']} {d['lastname']} created")
-    return redirect("people.index")
+def get_member_details(memberid):
+    """Get all member details by member id.
+
+    :param memberid: member ID
+    :return: a form containing all the member information
+    :raise 404: if the member does not exist
+    """
+    if request.method == "POST":
+        d = dict()
+        d["firstname"] = request.form["firstname"]
+        d["lastname"] = request.form["lastname"]
+        d["scoutname"] = request.form["scoutname"]
+        d["email"] = request.form["email"]
+        d["phone"] = request.form["phone"]
+        d["notes"] = request.form["notes"]
+        d["img"] = request.form["img"]
+        _ = Member.query.filter_by(id=memberid).update(d)
+        db.session.commit()
+        flash(f"Tschugger {d['scoutname']} updated", "success")
+
+    memberdetails = Member.query.filter_by(id=memberid).first()
+
+    return render_template(
+        "people/member.html",
+        member=memberdetails,
+    )
 
 
 @bp.route("/nomail", methods=("GET",))
