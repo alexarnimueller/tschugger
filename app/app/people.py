@@ -34,7 +34,7 @@ def add_new_member(member):
         flash(f"Tschugger {member.scoutname} updated", "success")
         redirect(url_for("views.index"))
 
-    return render_template("people/member.html", member=member, form=profile)
+    return render_template("people/new.html", member=member, form=profile)
 
 
 @bp.route("/<memberid>", methods=("GET", "POST"))
