@@ -58,9 +58,10 @@ def get_member_details(memberid):
     """
     change = False
     member = Member.query.filter_by(id=memberid).first()
-    logging.info(member)
+    logging.info(member.id)
+    logging.info(session["user_id"])
     form = ProfileForm(obj=member)
-    if memberid == session["user_id"]:
+    if memberid == int(session["user_id"]):
         logging.info("member allowed to change info")
         change = True
         if form.validate_on_submit():
