@@ -57,7 +57,7 @@ def create_app():
     app.add_url_rule("/", endpoint="index")
 
     # configure loggers
-    for logger in (logging.getLogger(), app.logger, logging.getLogger("sqlalchemy"), logging.getLogger("werkzeug")):
+    for logger in (logging.getLogger(), app.logger, logging.getLogger("werkzeug")):  # logging.getLogger("sqlalchemy")
         logger.addHandler(logging.StreamHandler())
         logger.setLevel(logging.DEBUG)
 
