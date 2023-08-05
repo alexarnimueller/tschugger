@@ -7,7 +7,6 @@ from auth import login_required
 from forms import ProfileForm
 
 bp = Blueprint("people", __name__, url_prefix="/people")
-logger = logging.getLogger(__name__)
 
 
 @bp.route("/", methods=("GET", "POST"))
@@ -26,15 +25,17 @@ def index():
 @login_required
 def add_new_member():
     user = AppUser.query.filter_by(id=session["user_id"]).first()
+    logging.info(f"found {user} logged in")
     profile = ProfileForm(id=session["user_id"], email=user.email)
     if profile.validate_on_submit():
-        logger.info(f"new member form validated")
+        logging.info(f"new member form validated")
         member = Member()
         profile.populate_obj(member)
         db.session.add(member)
         db.session.commit()
         flash(f"Tschugger {member.scoutname} updated", "success")
-        redirect(url_for("views.index"))
+        logging.info(f"Tschugger {member.scoutname} updated")
+        return redirect(url_for("views.index"))
 
     return render_template("people/new.html", form=profile)
 
