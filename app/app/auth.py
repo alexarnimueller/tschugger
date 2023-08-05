@@ -52,9 +52,9 @@ def register():
         user = AppUser()
         form.populate_obj(user)
         if AppUser.query.filter_by(username=user.username).first() is not None:
-            error += f"Username existiert schon! "
+            error += f"Username {user.username} existiert schon! "
         if AppUser.query.filter_by(email=user.email).first() is not None:
-            error += f"Email schon in Gebrauch!"
+            error += f"Email {user.email} schon in Gebrauch!"
         if not error:
             user.password = generate_password_hash(user.password)
             db.session.add(user)
@@ -63,10 +63,10 @@ def register():
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
             logging.info(f"{user.username}  registered")
-            redirect("people/add")
+            return redirect(url_for("people.add_new_member"))
         else:
             logging.warning(f"{error}")
-            flash(error, "danger")
+            flash(error.strip(), "danger")
     return render_template("auth/register.html", form=form)
 
 
