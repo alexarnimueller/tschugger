@@ -1,5 +1,5 @@
 import functools
-import requests
+import logging
 from flask import Blueprint
 from flask import flash
 from flask import g
@@ -17,6 +17,7 @@ from __init__ import db
 
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
+logger = logging.getLogger(__name__)
 
 
 def login_required(view):
@@ -62,8 +63,10 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
+            logger.info(f"{user.username}  registered")
             redirect(url_for("people.add_new_member"))
         else:
+            logger.warning(f"{error}")
             flash(error, "danger")
     return render_template("auth/register.html", form=form)
 
