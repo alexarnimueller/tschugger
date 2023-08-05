@@ -1,3 +1,5 @@
+import os
+from random import choice
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 import logging
 from __init__ import db
@@ -30,9 +32,12 @@ def add_new_member():
     logging.info(form)
     if form.validate_on_submit():
         logging.info(f"new member form validated")
+        members = Member.query.all()
+        imgs = set(os.listdir(url_for("static", "images"))).difference(set([m.img for m in members]))
         member = Member()
         form.populate_obj(member)
         member.id = user.id
+        member.img = choice(list(imgs))  # randomly choose image not yet used
         db.session.add(member)
         db.session.commit()
         flash(f"Tschugger {member.scoutname} updated", "success")

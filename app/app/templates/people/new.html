@@ -58,7 +58,7 @@
 					{{ form.email.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.email(class_="form-control") }}
+					{{ form.email(class_="form-control", readonly=true) }}
 				</dd>
 				{% if form.email.errors %}
 					<ul class="errors">
