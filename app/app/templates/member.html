@@ -16,7 +16,11 @@
 					{{ form.firstname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.firstname(class_="form-control") }}
+					{% if change %}
+						{{ form.firstname(class_="form-control") }}
+					{% else %}
+						{{ form.firstname(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 				{% if form.firstname.errors %}
 					<ul class="errors">
@@ -30,7 +34,11 @@
 					{{ form.lastname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.lastname(class_="form-control") }}
+					{% if change %}
+						{{ form.lastname(class_="form-control") }}
+					{% else %}
+						{{ form.lastname(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 				{% if form.lastname.errors %}
 					<ul class="errors">
@@ -44,7 +52,11 @@
 					{{ form.scoutname.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.scoutname(class_="form-control") }}
+					{% if change %}
+						{{ form.scoutname(class_="form-control") }}
+					{% else %}
+						{{ form.scoutname(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 				{% if form.scoutname.errors %}
 					<ul class="errors">
@@ -58,7 +70,11 @@
 					{{ form.email.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.email(class_="form-control", readonly=true) }}
+					{% if change %}
+						{{ form.email(class_="form-control") }}
+					{% else %}
+						{{ form.email(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 				{% if form.email.errors %}
 					<ul class="errors">
@@ -72,7 +88,11 @@
 					{{ form.phone.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.phone(class_="form-control") }}
+					{% if change %}
+						{{ form.phone(class_="form-control") }}
+					{% else %}
+						{{ form.phone(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 				{% if form.phone.errors %}
 					<ul class="errors">
@@ -86,7 +106,11 @@
 					{{ form.notes.label(class_="form-label fw-bold") }}
 				</dt>
 				<dd>
-					{{ form.notes(class_="form-control") }}
+					{% if change %}
+						{{ form.notes(class_="form-control") }}
+					{% else %}
+						{{ form.notes(class_="form-control", readonly=true) }}
+					{% endif %}
 				</dd>
 			</dl>
             

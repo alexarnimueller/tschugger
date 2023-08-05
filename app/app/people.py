@@ -40,11 +40,11 @@ def add_new_member():
         member.img = choice(list(imgs))  # randomly choose image not yet used
         db.session.add(member)
         db.session.commit()
-        flash(f"Tschugger {member.scoutname} updated", "success")
+        flash(f"Ahoi Tschugger '{member.scoutname}'!", "success")
         logging.info(f"Tschugger {member.scoutname} updated")
-        return redirect(url_for("index"))
+        return redirect(url_for("people.index"))
 
-    return render_template("people/new.html", form=form)
+    return render_template("member.html", form=form, change=True)
 
 
 @bp.route("/<memberid>", methods=("GET", "POST"))
@@ -56,25 +56,23 @@ def get_member_details(memberid):
     :return: a form containing all the member information
     :raise 404: if the member does not exist
     """
-    if request.method == "POST":
-        d = dict()
-        d["firstname"] = request.form["firstname"]
-        d["lastname"] = request.form["lastname"]
-        d["scoutname"] = request.form["scoutname"]
-        d["email"] = request.form["email"]
-        d["phone"] = request.form["phone"]
-        d["notes"] = request.form["notes"]
-        d["img"] = request.form["img"]
-        _ = Member.query.filter_by(id=memberid).update(d)
-        db.session.commit()
-        flash(f"Tschugger {d['scoutname']} updated", "success")
+    change = False
+    member = Member.query.filter_by(id=memberid).first()
+    form = ProfileForm(obj=member)
+    if memberid == session["user_id"]:
+        change = True
+        if form.validate_on_submit():
+            logging.info(f"new member form validated")
+            members = Member.query.all()
+            imgs = set(os.listdir("static/images")).difference(set([m.img for m in members]))
+            form.populate_obj(member)
+            member.img = choice(list(imgs))  # randomly choose image not yet used
+            db.session.add(member)
+            db.session.commit()
+            flash(f"Profil von Tschugger '{member.scoutname}' angepasst!", "success")
+            return redirect(url_for("people.index"))
 
-    memberdetails = Member.query.filter_by(id=memberid).first()
-
-    return render_template(
-        "people/member.html",
-        member=memberdetails,
-    )
+    return render_template("member.html", form=form, change=change)
 
 
 @bp.route("/nomail", methods=("GET",))
