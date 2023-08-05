@@ -35,7 +35,7 @@ def add_new_member():
         db.session.commit()
         flash(f"Tschugger {member.scoutname} updated", "success")
         logging.info(f"Tschugger {member.scoutname} updated")
-        return redirect(url_for("views.index"))
+        return redirect(url_for("index"))
 
     return render_template("people/new.html", form=profile)
 
