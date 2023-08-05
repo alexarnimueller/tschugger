@@ -4,7 +4,6 @@ from wtforms.validators import InputRequired, Email
 
 
 class UserRegistrationForm(FlaskForm):
-    id = IntegerField("id", validators=[InputRequired()])
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
     email = StringField(
@@ -17,6 +16,7 @@ class UserRegistrationForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
+    id = IntegerField("id", validators=[InputRequired()])
     firstname = StringField(
         "Vorname",
         validators=[
