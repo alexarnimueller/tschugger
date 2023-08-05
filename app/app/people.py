@@ -1,6 +1,6 @@
 import os
 from random import choice
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, flash, redirect, url_for, session
 import logging
 from __init__ import db
 from datetime import date
@@ -14,7 +14,7 @@ bp = Blueprint("people", __name__, url_prefix="/people")
 @bp.route("/", methods=("GET", "POST"))
 @login_required
 def index():
-    title = "Patrouille"
+    title = "Patrouille flamberg"
     members = Member.query.all()
     return render_template(
         "tschugger.html",

@@ -1,3 +1,4 @@
+import os
 import functools
 import logging
 from flask import Blueprint
@@ -10,7 +11,7 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from forms import UserRegistrationForm, ProfileForm
+from forms import UserRegistrationForm
 from models import AppUser, Member
 
 from __init__ import db
@@ -19,13 +20,25 @@ from __init__ import db
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
+def access_required(view):
+    """View decorator that redirects anonymous users to the login page."""
+
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if "access" not in g:
+            return redirect(url_for("auth.login"))
+        return view(**kwargs)
+
+    return wrapped_view
+
+
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.access"))
         return view(**kwargs)
 
     return wrapped_view
@@ -44,7 +57,21 @@ def load_logged_in_user():
         )
 
 
+@bp.route("/access", methods=("GET", "POST"))
+def access():
+    """Log in a registered user by adding the user id to the session."""
+    if request.method == "POST":
+        password = request.form["password"]
+        if os.getenv("ACCESS_PASSWORD") == password:
+            g.access = True
+            return redirect(url_for("auth.login"))
+
+        flash("Incorrect password!", "danger")
+    return render_template("auth/access.html")
+
+
 @bp.route("/register", methods=("GET", "POST"))
+@access_required
 def register():
     error = ""
     form = UserRegistrationForm()

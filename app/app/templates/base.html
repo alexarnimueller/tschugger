@@ -25,7 +25,6 @@
   
   {% set navigation_bar = [
     (url_for('people.index'), 'index', 'Tschugger'),
-    (url_for('auth.users'), 'admin', 'Admin'),
     (url_for('auth.logout'), 'logout', 'Log Out')] %}
 
   {% set active_page = active_page | default('index') -%}
