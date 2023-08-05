@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import InputRequired, Email
 
 
 class UserRegistrationForm(FlaskForm):
+    id = IntegerField("id", validators=[InputRequired()])
     username = StringField("Username", validators=[InputRequired()])
-    password = PasswordField("Password", [InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired()])
     email = StringField(
         "Email",
         validators=[

@@ -21,8 +21,7 @@ create table if not exists member (
     phone varchar(64) unique,
     notes text default '',
     img varchar(64),
-    PRIMARY KEY(id),
-    CONSTRAINT fk_user
-      FOREIGN KEY(id) 
-	  REFERENCES app_user(id)
+    constraint fk_user
+      foreign key(id) 
+	  references app_user(id)
 );
