@@ -68,6 +68,27 @@
 					{% endfor %}
 					</ul>
 				{% endif %}
+
+				<dt class="small">
+					{{ form.phone.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.phone(class_="form-control") }}
+				</dd>
+				{% if form.phone.errors %}
+					<ul class="errors">
+					{% for error in form.phone.errors %}
+						<li class="text-danger my-1">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+
+				<dt class="small">
+					{{ form.notes.label(class_="form-label fw-bold") }}
+				</dt>
+				<dd>
+					{{ form.notes(class_="form-control") }}
+				</dd>
 			</dl>
             
         </div>

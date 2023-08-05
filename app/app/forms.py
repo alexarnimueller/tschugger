@@ -16,7 +16,6 @@ class UserRegistrationForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
-    id = IntegerField("id", validators=[InputRequired()])
     firstname = StringField(
         "Vorname",
         validators=[
@@ -43,4 +42,4 @@ class ProfileForm(FlaskForm):
         ],
     )
     phone = StringField("Mobile", validators=[InputRequired()])
-    recaptcha = RecaptchaField()
+    notes = StringField("Motto")

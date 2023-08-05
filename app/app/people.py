@@ -26,12 +26,13 @@ def index():
 def add_new_member():
     user = AppUser.query.filter_by(id=session["user_id"]).first()
     logging.info(f"found {user} logged in")
-    form = ProfileForm(id=session["user_id"], email=user.email)
+    form = ProfileForm(email=user.email)
     logging.info(form)
     if form.validate_on_submit():
         logging.info(f"new member form validated")
         member = Member()
         form.populate_obj(member)
+        member.id = user.id
         db.session.add(member)
         db.session.commit()
         flash(f"Tschugger {member.scoutname} updated", "success")
