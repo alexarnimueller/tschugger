@@ -1,6 +1,8 @@
 import os
 import redis
+import logging
 from flask import Flask
+from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_session import Session
@@ -54,8 +56,10 @@ def create_app():
 
     app.add_url_rule("/", endpoint="index")
 
-    # exclude csrf for new profile after user registration
-    csrf.exempt("app.blueprints.people.add_new_member")
+    # configure loggers
+    for logger in (logging.getLogger(), app.logger, logging.getLogger("sqlalchemy"), logging.getLogger("werkzeug")):
+        logger.addHandler(logging.StreamHandler())
+        logger.setLevel(logging.DEBUG)
 
     # configure Talisman to handle CSP
     talisman = Talisman(
