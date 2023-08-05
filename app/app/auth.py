@@ -87,7 +87,7 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session["user_id"] = user.id
-            return redirect(url_for("index"))
+            return redirect(url_for("people.index"))
 
         flash(error, "danger")
     return render_template("auth/login.html")
