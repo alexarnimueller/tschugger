@@ -51,7 +51,6 @@ def register():
     if form.validate_on_submit():
         user = AppUser()
         form.populate_obj(user)
-        print(f"{user}")
         if AppUser.query.filter_by(username=user.username).first() is not None:
             error += f"Username existiert schon! "
         if AppUser.query.filter_by(email=user.email).first() is not None:
@@ -64,7 +63,7 @@ def register():
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
             logging.info(f"{user.username}  registered")
-            redirect(url_for("people.add_new_member"))
+            redirect("people/add")
         else:
             logging.warning(f"{error}")
             flash(error, "danger")
