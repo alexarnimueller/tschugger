@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 import logging
 from __init__ import db
 from datetime import date
@@ -24,9 +24,11 @@ def index():
 
 @bp.route("/add", methods=("GET", "POST"))
 @login_required
-def add_new_member(member):
-    profile = ProfileForm()
+def add_new_member():
+    user = AppUser().query(id=session["user_id"])
+    profile = ProfileForm(id=session["user_id"], email=user.email)
     if profile.validate_on_submit():
+        logger.info(f"new member form validated")
         member = Member()
         profile.populate_obj(member)
         db.session.add(member)
@@ -34,7 +36,7 @@ def add_new_member(member):
         flash(f"Tschugger {member.scoutname} updated", "success")
         redirect(url_for("views.index"))
 
-    return render_template("people/new.html", member=member, form=profile)
+    return render_template("people/new.html", form=profile)
 
 
 @bp.route("/<memberid>", methods=("GET", "POST"))

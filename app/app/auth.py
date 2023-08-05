@@ -62,7 +62,7 @@ def register():
             session.clear()  # log user in
             session["user_id"] = user.id
             flash(f"{user.username}  registriert.", "success")
-            redirect(url_for("people.add_new_member", member=user))
+            redirect(url_for("people.add_new_member"))
         else:
             flash(error, "danger")
     return render_template("auth/register.html", form=form)
