@@ -61,7 +61,7 @@ def get_member_details(memberid):
     logging.info(member.id)
     logging.info(session["user_id"])
     form = ProfileForm(obj=member)
-    if memberid == int(session["user_id"]):
+    if int(memberid) == int(session["user_id"]):
         logging.info("member allowed to change info")
         change = True
         if form.validate_on_submit():
