@@ -64,7 +64,7 @@ def access():
         password = request.form["password"]
         if os.getenv("ACCESS_PASSWORD") == password:
             g.access = True
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.register"))
 
         flash("Incorrect password!", "danger")
     return render_template("auth/access.html")
