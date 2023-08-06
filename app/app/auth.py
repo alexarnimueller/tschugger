@@ -120,10 +120,12 @@ def users():
 def edit_user(userid):
     user = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
-        d = dict()
+        d = dict(admin=False)
         d["username"] = request.form["username"]
         d["password"] = generate_password_hash(request.form["password"])
         d["email"] = request.form["email"]
+        if request.form.get("admin"):
+            d["admin"] = True
         _ = AppUser.query.filter_by(id=userid).update(d)
         _ = Member.query.filter_by(id=userid).update({"email": d["email"]})
         db.session.commit()
