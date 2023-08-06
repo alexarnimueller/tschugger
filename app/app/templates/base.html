@@ -18,7 +18,6 @@
   {% block navbar %}
   
   {% set navigation_bar = [
-    (url_for('people.index'), 'index', 'Tschugger'),
     (url_for('views.infos'), 'infos', 'Programm'),
     (url_for('auth.logout'), 'logout', 'Log Out')] %}
 
@@ -35,12 +34,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if g.user %}
-            {% for href, id, caption in navigation_bar %}
-              <li class="nav-item"><a class="nav-link {% if id == active_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }}</a></li>
-            {% endfor %}
             {% if g.user.admin == true %}
               <li class="nav-item"><a class="nav-link {% if admin == active_page %}active{% endif %}" href="{{url_for('auth.users')}}">Admin</a></li>
             {% endif %}
+            {% for href, id, caption in navigation_bar %}
+              <li class="nav-item"><a class="nav-link {% if id == active_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }}</a></li>
+            {% endfor %}
           </ul>
           <span class="ms-auto me-2 navbar-text">{{ g.user['username'] }}</span>
           {% endif %}
