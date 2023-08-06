@@ -141,6 +141,7 @@ def delete_user(userid):
     member = Member.query.filter_by(id=userid).first()
     user = AppUser.query.filter_by(id=userid).first()
     db.session.delete(member)
+    db.session.commit()
     db.session.delete(user)
     db.session.commit()
 
