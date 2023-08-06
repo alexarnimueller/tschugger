@@ -45,7 +45,7 @@
               <li class="nav-item"><a class="nav-link {% if id == active_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }}</a></li>
             {% endfor %}
             {% if g.user.admin == true %}
-              <li class="nav-item"><a class="nav-link {% if admin == active_page %}active{% endif %}" href="{{url_for(auth.users)}}">Admin</a></li>
+              <li class="nav-item"><a class="nav-link {% if admin == active_page %}active{% endif %}" href="{{url_for('auth.users')}}">Admin</a></li>
             {% endif %}
           </ul>
           <span class="ms-auto me-2 navbar-text">{{ g.user['username'] }}</span>
