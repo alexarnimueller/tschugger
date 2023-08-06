@@ -124,7 +124,7 @@ def edit_user(userid):
     user = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
         pw = request.form["password"]
-        blacklist = open(url_for("static", filename="blacklist.txt"), "r").readlines()
+        blacklist = open("static/blacklist.txt", "r").readlines()
         if pw not in blacklist:
             d = dict(admin=False)
             d["username"] = request.form["username"]
