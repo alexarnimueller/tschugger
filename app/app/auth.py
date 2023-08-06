@@ -64,12 +64,15 @@ def register():
         error = ""
         form = UserRegistrationForm()
         if form.validate_on_submit():
+            blacklist = open(url_for("static", filename="blacklist.txt"), "r").readlines()
             user = AppUser()
             form.populate_obj(user)
             if AppUser.query.filter_by(username=user.username).first() is not None:
                 error += f"Username {user.username} existiert schon! "
             if AppUser.query.filter_by(email=user.email).first() is not None:
-                error += f"Email {user.email} schon in Gebrauch!"
+                error += f"Email {user.email} schon in Gebrauch! "
+            if user.password in blacklist:
+                error += "Dein Passwort ist zu simpel!"
             if not error:
                 user.password = generate_password_hash(user.password)
                 db.session.add(user)
@@ -120,19 +123,23 @@ def users():
 def edit_user(userid):
     user = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
-        d = dict(admin=False)
-        d["username"] = request.form["username"]
-        d["password"] = generate_password_hash(request.form["password"])
-        d["email"] = request.form["email"]
-        if request.form.get("admin"):
-            d["admin"] = True
-        _ = AppUser.query.filter_by(id=userid).update(d)
-        _ = Member.query.filter_by(id=userid).update({"email": d["email"]})
-        db.session.commit()
+        pw = request.form["password"]
+        blacklist = open(url_for("static", filename="blacklist.txt"), "r").readlines()
+        if pw not in blacklist:
+            d = dict(admin=False)
+            d["username"] = request.form["username"]
+            d["password"] = generate_password_hash()
+            d["email"] = request.form["email"]
+            if request.form.get("admin"):
+                d["admin"] = True
+            _ = AppUser.query.filter_by(id=userid).update(d)
+            _ = Member.query.filter_by(id=userid).update({"email": d["email"]})
+            db.session.commit()
 
-        flash(f"User '{d['username']}' updated", "success")
-
-        return redirect(url_for("auth.users"))
+            flash(f"User '{d['username']}' updated", "success")
+            return redirect(url_for("auth.users"))
+        else:
+            flash(f"Passwort zu simpel!", "danger")
 
     return render_template("auth/edit.html", user=user)
 
