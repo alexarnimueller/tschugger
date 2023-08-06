@@ -56,7 +56,7 @@
     {% endblock %}
 
     {% for category, message in get_flashed_messages(with_categories=true) %}
-    <div class="alert alert-{{category}} fade in" role="alert">
+    <div class="alert alert-{{category}} alert-dismissible" role="alert">
       {{ message }}
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     </div>
