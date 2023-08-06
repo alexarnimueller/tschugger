@@ -92,10 +92,10 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         error = None
-        user = AppUser.query.filter_by(username=form.username).first()
+        user = AppUser.query.filter_by(username=form.username.data).first()
         if not user:
             error = "Unknown username."
-        elif not check_password_hash(user.password, form.password):
+        elif not check_password_hash(user.password, form.password.data):
             error = f"Incorrect password for {user.username} ."
 
         if error is None:
