@@ -11,7 +11,7 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from forms import UserRegistrationForm
+from forms import UserRegistrationForm, LoginForm
 from models import AppUser, Member
 
 from __init__ import db
@@ -89,14 +89,13 @@ def register():
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     """Log in a registered user by adding the user id to the session."""
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+    form = LoginForm()
+    if form.validate_on_submit():
         error = None
-        user = AppUser.query.filter_by(username=username).first()
+        user = AppUser.query.filter_by(username=form.username).first()
         if not user:
             error = "Unknown username."
-        elif not check_password_hash(user.password, password):
+        elif not check_password_hash(user.password, form.password):
             error = f"Incorrect password for {user.username} ."
 
         if error is None:
