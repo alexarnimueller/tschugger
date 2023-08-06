@@ -32,7 +32,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('views.index') }}"> flamberg - 
+        <a class="navbar-brand" href="{{ url_for('people.index') }}"> flamberg - 
           <img src="{{ url_for('static', filename='images/tschugger_logo.png') }}" alt="" width="120" height="30" class="d-inline-block align-text-top">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
               <li class="nav-item"><a class="nav-link {% if id == active_page %}active{% endif %}" href="{{ href|e }}">{{ caption|e }}</a></li>
             {% endfor %}
             {% if g.user.admin == true %}
-              <li class="nav-item"><a class="nav-link {% if admin == active_page %}active{% endif %}" href="auth.users">Admin</a></li>
+              <li class="nav-item"><a class="nav-link {% if admin == active_page %}active{% endif %}" href="{{url_for(auth.users)}}">Admin</a></li>
             {% endif %}
           </ul>
           <span class="ms-auto me-2 navbar-text">{{ g.user['username'] }}</span>
