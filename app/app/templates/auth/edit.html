@@ -6,13 +6,13 @@
 
 <form method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label class="form-label mt-1" for="username">Username</label>
+    <label class="form-label mt-2" for="username">Username</label>
     <input class="form-control" name="username" id="username" value="{{ user.username }}" required>
-    <label class="form-label mt-1" for="password">Password</label>
+    <label class="form-label mt-2" for="password">Password</label>
     <input class="form-control" type="password" name="password" id="password" required>
-    <label class="form-label mt-1" for="email">Email</label>
+    <label class="form-label mt-2" for="email">Email</label>
     <input class="form-control" type="email" name="email" id="email" value="{{ user.email }}" required>
-    <div class="form-check mt-1">
+    <div class="form-check mt-2">
       <input class="form-check-input" type="checkbox" name="admin" id="admin" {% if user.admin == true %}checked="checked"{% endif %}>
       <label class="form-check-label" for="admin">Admin</label>
     </div>
