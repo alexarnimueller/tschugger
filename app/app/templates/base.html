@@ -66,17 +66,5 @@
       {% block content %}{% endblock %}
     </div>
 
-  {% block scripts %}
-
-  <!-- tooltip -->
-  <script nonce="{{ csp_nonce() }}">
-    setTimeout(function () {
-      // Closing the alert after 3 sec
-      $('.alert').alert('close');
-  }, 3000);
-  </script>
-
-
-  {% endblock %}
   </body>
 </html>
