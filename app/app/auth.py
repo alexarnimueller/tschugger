@@ -128,7 +128,7 @@ def edit_user(userid):
         if pw not in blacklist:
             d = dict(admin=False)
             d["username"] = request.form["username"]
-            d["password"] = generate_password_hash()
+            d["password"] = generate_password_hash(pw)
             d["email"] = request.form["email"]
             if request.form.get("admin"):
                 d["admin"] = True
