@@ -71,7 +71,7 @@ def register():
                 error += f"Username {user.username} existiert schon! "
             if AppUser.query.filter_by(email=user.email).first() is not None:
                 error += f"Email {user.email} schon in Gebrauch! "
-            if blacklist.contains(user.password):
+            if user.password in blacklist:
                 error += "Dein Passwort ist zu simpel!"
             if not error:
                 user.password = generate_password_hash(user.password)
@@ -126,7 +126,7 @@ def edit_user(userid):
         pw = request.form["password"]
         blacklist = open("static/blacklist.txt", "r").read()
         logging.info(blacklist)
-        if not blacklist.contains(pw):
+        if pw not in blacklist:
             d = dict(admin=False)
             d["username"] = request.form["username"]
             d["password"] = generate_password_hash(pw)
