@@ -118,30 +118,33 @@ def users():
 @bp.route("/users/edit/<userid>", methods=("GET", "POST"))
 @login_required
 def edit_user(userid):
-    usr = AppUser.query.filter_by(id=userid).first()
+    user = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
         d = dict()
         d["username"] = request.form["username"]
         d["password"] = generate_password_hash(request.form["password"])
         d["email"] = request.form["email"]
-        _ = Member.query.filter_by(id=userid).update(d)
+        _ = AppUser.query.filter_by(id=userid).update(d)
+        _ = Member.query.filter_by(id=userid).update({"email": d["email"]})
         db.session.commit()
 
         flash(f"User '{d['username']}' updated", "success")
 
         return redirect(url_for("auth.users"))
 
-    return render_template("auth/edit.html", user=usr)
+    return render_template("auth/edit.html", user=user)
 
 
 @bp.route("/users/delete/<userid>", methods=("GET",))
 @login_required
 def delete_user(userid):
-    usr = AppUser.query.filter_by(id=userid).first()
-    db.session.delete(usr)
+    member = Member.query.filter_by(id=userid).first()
+    user = AppUser.query.filter_by(id=userid).first()
+    db.session.delete(member)
+    db.session.delete(user)
     db.session.commit()
 
-    flash(f"User '{usr.username}' deleted", "success")
+    flash(f"User '{user.username}' with profile '{member.scoutname}' deleted", "warning")
 
     return redirect(url_for("auth.users"))
 

@@ -11,6 +11,7 @@
             <tr>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
+
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -20,6 +21,7 @@
             <tr>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
+                <td><input type="checkbox" name="admin" {% if user.admin == true %}checked="checked"{% endif %} disabled="disabled"></td>
                 <td><a href="{{ url_for('auth.edit_user', userid=user.id) }}">
                     <i class="fa fa-pencil text-primary"></i></a>
                 </td>
@@ -36,19 +38,6 @@
 <div class="row">
     <div class="col my-2">
         <a class="btn btn-success mb-6" href="{{ url_for('auth.register') }}">Register New Admin</a>
-    </div>
-</div>
-
-
-<!--special request links-->
-<div class="row mt-4">
-    <h1>Special Queries</h1>
-    <div class="col my-3">
-        <ul>
-            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.nomail') }}">Members without an email address</a></li>
-            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.inactive') }}">Inactive Members</a></li>
-            <li><a class="link-primary fs-5 my-2" href="{{ url_for('people.equinox') }}">Equinox List (by categories)</a></li>
-        </ul>
     </div>
 </div>
 
