@@ -64,14 +64,14 @@ def register():
         error = ""
         form = UserRegistrationForm()
         if form.validate_on_submit():
-            blacklist = open(url_for("static", filename="blacklist.txt"), "r").readlines()
+            blacklist = open("static/blacklist.txt", "r").read()
             user = AppUser()
             form.populate_obj(user)
             if AppUser.query.filter_by(username=user.username).first() is not None:
                 error += f"Username {user.username} existiert schon! "
             if AppUser.query.filter_by(email=user.email).first() is not None:
                 error += f"Email {user.email} schon in Gebrauch! "
-            if user.password in blacklist:
+            if blacklist.contains(user.password):
                 error += "Dein Passwort ist zu simpel!"
             if not error:
                 user.password = generate_password_hash(user.password)
@@ -124,8 +124,9 @@ def edit_user(userid):
     user = AppUser.query.filter_by(id=userid).first()
     if request.method == "POST":
         pw = request.form["password"]
-        blacklist = open("static/blacklist.txt", "r").readlines()
-        if pw not in blacklist:
+        blacklist = open("static/blacklist.txt", "r").read()
+        logging.info(blacklist)
+        if not blacklist.contains(pw):
             d = dict(admin=False)
             d["username"] = request.form["username"]
             d["password"] = generate_password_hash(pw)
