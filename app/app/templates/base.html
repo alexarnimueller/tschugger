@@ -68,13 +68,11 @@
       {% block content %}{% endblock %}
     </div>
 
-    {% block scripts %}
+  {% block scripts %}
 
   <!-- tooltip -->
   <script nonce="{{ csp_nonce() }}">
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    });
+    $('.alert').alert();
   </script>
   {% endblock %}
   </body>
