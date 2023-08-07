@@ -86,6 +86,8 @@ def create_app():
                 "*.googleapis.com",
                 "*.googletagmanager.com",
                 "*.jsdelivr.net",
+                "*.jquery.com",
+                "*.bootstrapcdn.com",
                 "cdnjs.cloudflare.com",
                 "cdn.datatables.net",
                 "unpkg.com",
