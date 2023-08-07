@@ -4,7 +4,7 @@
 {% block content %}
 <div class="row">
   <div class="col-md-12 text-center my-2">
-    <h1>Profil erstellen</h1>
+    <h1>{% block title %}Tschugger Profil {% if change == true %}bearbeiten{% endif %}{% endblock %}</h1>
   </div>
   <div class="col-sm-12 my-2">
     <div class="card border shadow p-3">
