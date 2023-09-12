@@ -5,7 +5,7 @@
   <form method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label class="form-label" for="handy">Handy Nummer</label>
-    <input class="form-control" type="phone" name="handy" id="handy" required>
+    <input class="form-control" type="tel" name="handy" id="handy" required>
     <input class="btn btn-primary my-2" type="submit" value="Orten">
   </form>
   <br>
