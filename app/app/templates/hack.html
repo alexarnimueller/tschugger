@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% set active_page = 'index' %}
+
+{% block content %}
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="form-label" for="password">Passwort</label>
+    <input class="form-control" type="password" name="password" id="password" required>
+    <!-- pw: raclette -->
+    <input class="btn btn-primary my-2" type="submit" value="Get Access">
+  </form>
+  <br>
+{% endblock %}
