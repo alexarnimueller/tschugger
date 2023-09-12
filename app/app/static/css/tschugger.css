@@ -44,11 +44,6 @@ body {
     }
 }
 
-.map-center {
-    margin: 0 auto;
-    display: block;
-}
-
 
 /* unvisited link */
 a:link {
