@@ -20,7 +20,7 @@ def infos():
 def hack():
     if request.method == "POST":
         password = request.form["password"]
-        if password == "hack":
+        if password == "raclette":
             session["hacked"] = True
             return redirect(url_for("views.valmira"))
     return render_template("hack.html")
