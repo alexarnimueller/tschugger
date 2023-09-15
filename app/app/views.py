@@ -18,7 +18,7 @@ def infos():
 
 @bp.route("/ausbildung", methods=("GET",))
 @login_required
-def infos():
+def ausbildung():
     return render_template("ausbildung.html")
 
 
