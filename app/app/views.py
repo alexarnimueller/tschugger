@@ -16,6 +16,12 @@ def infos():
     return render_template("infos.html")
 
 
+@bp.route("/ausbildung", methods=("GET",))
+@login_required
+def infos():
+    return render_template("ausbildung.html")
+
+
 @bp.route("/hack", methods=("GET", "POST"))
 def hack():
     if request.method == "POST":
